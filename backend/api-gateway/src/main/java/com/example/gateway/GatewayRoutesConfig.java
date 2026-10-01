@@ -19,6 +19,11 @@ public class GatewayRoutesConfig {
                 .route(RequestPredicates.path("/auth/**"), http())
                 .route(RequestPredicates.path("/me"), http())
                 .filter(lb("user-service"))
-                .build();
+                .build()
+                .and(route("product-service")
+                        .route(RequestPredicates.path("/products"), http())
+                        .route(RequestPredicates.path("/products/**"), http())
+                        .filter(lb("product-service"))
+                        .build());
     }
 }

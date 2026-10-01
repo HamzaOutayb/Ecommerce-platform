@@ -36,6 +36,7 @@ services:
       - "8081:8081"
     environment:
       SPRING_MONGODB_URI: mongodb://mongodb:27017/buy-01-db
+      JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
     depends_on:
       mongodb:
         condition: service_healthy
@@ -48,6 +49,25 @@ services:
       retries: 12
       start_period: 90s
 
+  product-service:
+    build:
+      context: ./backend/productservice
+      dockerfile: Dockerfile
+    container_name: product-service
+    ports:
+      - "8082:8082"
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8082/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 90s
+
   api-gateway:
     build:
       context: ./backend/api-gateway
@@ -55,10 +75,14 @@ services:
     container_name: api-gateway
     ports:
       - "8080:8080"
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
     depends_on:
       eureka-server:
         condition: service_healthy
       user-service:
+        condition: service_healthy
+      product-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1"]

@@ -32,6 +32,10 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products", "/products/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products").hasRole("SELLER")
+                        .requestMatchers(HttpMethod.PUT, "/products/{id}").hasRole("SELLER")
+                        .requestMatchers(HttpMethod.DELETE, "/products/{id}").hasRole("SELLER")
                         .anyRequest().authenticated())
                 .build();
     }
@@ -40,7 +44,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
