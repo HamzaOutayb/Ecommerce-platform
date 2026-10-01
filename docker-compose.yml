@@ -67,5 +67,16 @@ services:
       retries: 12
       start_period: 90s
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: buy-01-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+
 volumes:
   mongodb_data:
