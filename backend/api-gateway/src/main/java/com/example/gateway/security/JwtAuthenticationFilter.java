@@ -41,9 +41,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authorization.substring(7);
         try {
             String email = jwtService.extractEmail(token);
-            //imrprov check token validity first
-            if (email != null && !email.isBlank() && SecurityContextHolder.getContext().getAuthentication() == null && jwtService.isTokenValid(token)) {
-                    String role = jwtService.extractRole(token);
+            if (email != null && !email.isBlank()
+                    && SecurityContextHolder.getContext().getAuthentication() == null
+                    && jwtService.isTokenValid(token)) {
+                String role = jwtService.extractRole(token);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         email, null, List.of(new SimpleGrantedAuthority(role)));
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -51,7 +52,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (JwtException | IllegalArgumentException ex) {
             SecurityContextHolder.clearContext();
-            System.out.println("JWT authentication failed: " + ex.getMessage());
         }
 
         filterChain.doFilter(request, response);

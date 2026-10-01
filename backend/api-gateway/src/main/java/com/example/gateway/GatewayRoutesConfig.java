@@ -16,7 +16,8 @@ public class GatewayRoutesConfig {
     @Bean
     public RouterFunction<ServerResponse> gatewayRoutes() {
         return route("user-service")
-                .route(RequestPredicates.path("/api/users/**"), http())
+                .route(RequestPredicates.path("/auth/**"), http())
+                .route(RequestPredicates.path("/me"), http())
                 .filter(lb("user-service"))
                 .build();
     }

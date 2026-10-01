@@ -6,8 +6,6 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-    networks:
-      - buy-01-network
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
@@ -22,13 +20,6 @@ services:
     container_name: eureka-server
     ports:
       - "8761:8761"
-    networks:
-      - buy-01-network
-    environment:
-      SPRING_APPLICATION_NAME: eureka-server
-      SERVER_PORT: 8761
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
-      EUREKA_CLIENT_FETCH_REGISTRY: "false"
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8761/actuator/health || exit 1"]
       interval: 10s
@@ -43,17 +34,8 @@ services:
     container_name: user-service
     ports:
       - "8081:8081"
-    networks:
-      - buy-01-network
     environment:
-      SPRING_APPLICATION_NAME: user-service
-      SERVER_PORT: 8081
       SPRING_MONGODB_URI: mongodb://mongodb:27017/buy-01-db
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/buy-01-db
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
-      EUREKA_INSTANCE_HOSTNAME: user-service
-      JWT_SECRET: change-this-development-secret-key-which-is-long-enough
     depends_on:
       mongodb:
         condition: service_healthy
@@ -73,15 +55,6 @@ services:
     container_name: api-gateway
     ports:
       - "8080:8080"
-    networks:
-      - buy-01-network
-    environment:
-      SPRING_APPLICATION_NAME: api-gateway
-      SERVER_PORT: 8080
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
-      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
-      EUREKA_INSTANCE_HOSTNAME: api-gateway
-      JWT_SECRET: change-this-development-secret-key-which-is-long-enough
     depends_on:
       eureka-server:
         condition: service_healthy
@@ -93,10 +66,6 @@ services:
       timeout: 5s
       retries: 12
       start_period: 90s
-
-networks:
-  buy-01-network:
-    driver: bridge
 
 volumes:
   mongodb_data:
