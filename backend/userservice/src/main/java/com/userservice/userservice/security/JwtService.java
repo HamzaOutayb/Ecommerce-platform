@@ -16,47 +16,63 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-	@Value("${security.jwt.secret}")
-	private String jwt_secret;
+    @Value("${security.jwt.secret}")
+    private String jwtSecret;
 
-	@Value("${security.jwt.expiration-ms}")
-	private long jwt_expiration;
+    @Value("${security.jwt.expiration-ms}")
+    private long jwtExpiration;
 
-	public String generateToken(UserDetails userDetails) {
-		return Jwts.builder()
-			.subject(userDetails.getUsername())
-			.claim("role", userDetails.getAuthorities().stream().findFirst()
-				.map(authority -> authority.getAuthority()).orElse("ROLE_CLIENT"))
-			.issuedAt(new Date())
-			.expiration(new Date(System.currentTimeMillis() + jwt_expiration))
-			.signWith(getSigningKey())
-			.compact();
-	}
+    public String generateToken(UserDetails userDetails) {
+        String role = userDetails.getAuthorities().stream().findFirst()
+                .map(authority -> authority.getAuthority())
+                .orElse("ROLE_CLIENT");
 
-	public String extractEmail(String token) {
-		return extractClaims(token).getSubject();
-	}
+        return Jwts.builder()
+                .subject(userDetails.getUsername())
+                .claim("role", role)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSigningKey())
+                .compact();
+    }
 
-	public boolean isTokenValid(String token, UserDetails userDetails) {
-		String email = extractEmail(token);
-		return email.equals(userDetails.getUsername())
-			&& !isTokenExpired(extractClaims(token).getExpiration());
-	}
+    public String extractEmail(String token) {
+        return extractClaims(token).getSubject();
+    }
 
-	private boolean isTokenExpired(Date expiration) {
-		return expiration == null || expiration.before(new Date());
-	}
+    public String extractRole(String token) {
+        String role = extractClaims(token).get("role", String.class);
+        return role != null ? role : "ROLE_CLIENT";
+    }
 
-	private Claims extractClaims(String token) {
-		return Jwts.parser()
-			.verifyWith(getSigningKey())
-			.build()
-			.parseSignedClaims(token)
-			.getPayload();
-	}
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        String email = extractEmail(token);
+        return email != null && email.equalsIgnoreCase(userDetails.getUsername())
+                && !isTokenExpired(extractClaims(token).getExpiration());
+    }
 
-	private SecretKey getSigningKey() {
-		return Keys.hmacShaKeyFor(jwt_secret.getBytes(StandardCharsets.UTF_8));
-	}
+    public boolean isTokenValid(String token) {
+        try {
+            Claims claims = extractClaims(token);
+            return claims.getSubject() != null && !isTokenExpired(claims.getExpiration());
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
+    private boolean isTokenExpired(Date expiration) {
+        return expiration == null || expiration.before(new Date());
+    }
+
+    private Claims extractClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
 }

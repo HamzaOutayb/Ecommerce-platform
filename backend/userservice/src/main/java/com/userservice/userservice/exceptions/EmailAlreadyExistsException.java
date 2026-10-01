@@ -1,4 +1,4 @@
-package com.userservice.userservice.exeptions;
+package com.userservice.userservice.exceptions;
 
 public class EmailAlreadyExistsException extends RuntimeException {
     public EmailAlreadyExistsException(String message) {

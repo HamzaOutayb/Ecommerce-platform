@@ -1,19 +1,34 @@
 package com.userservice.userservice.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class ErrorResponse {
-	private String message;
-	private int status;
+    private String message;
+    private int status;
 
-	public ErrorResponse(String message) {
-		this(message, 400);
-	}
+    public ErrorResponse() {
+    }
+
+    public ErrorResponse(String message, int status) {
+        this.message = message;
+        this.status = status;
+    }
+
+    public ErrorResponse(String message) {
+        this(message, 400);
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

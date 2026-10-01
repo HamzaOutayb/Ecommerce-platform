@@ -10,28 +10,26 @@ import com.userservice.userservice.dto.LoginRequest;
 import com.userservice.userservice.dto.LoginResponse;
 import com.userservice.userservice.dto.RegisterRequest;
 import com.userservice.userservice.dto.RegisterResponse;
-import com.userservice.userservice.service.RegisterService;
+import com.userservice.userservice.service.AuthService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/auth")
 public class AuthController {
-    RegisterService registerService;
+    private final AuthService authService;
 
-    AuthController(RegisterService registerService) {
-        this.registerService = registerService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    private ResponseEntity<LoginResponse> login( @Valid @RequestBody LoginRequest loginRequest) {
-
-        return ResponseEntity.ok(registerService.login(loginRequest));
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
-    @PostMapping("/register")
-    private ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest loginRequest) {
-        return ResponseEntity.ok(registerService.register(loginRequest));
-    }
-
-    
 }
