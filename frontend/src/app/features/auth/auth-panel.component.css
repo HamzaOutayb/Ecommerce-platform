@@ -1,0 +1,51 @@
+.panel {
+  padding: 20px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+h3 {
+  margin: 24px 0 8px;
+}
+
+form {
+  display: grid;
+  gap: 12px;
+  max-width: 420px;
+}
+
+label {
+  display: grid;
+  gap: 5px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #999;
+  font: inherit;
+}
+
+button {
+  width: fit-content;
+  margin: 4px 8px 4px 0;
+  padding: 7px 12px;
+  font: inherit;
+  cursor: pointer;
+}
+
+pre {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  padding: 12px;
+  background: #f1f1f1;
+}
+
+.error {
+  color: #a40000;
+}

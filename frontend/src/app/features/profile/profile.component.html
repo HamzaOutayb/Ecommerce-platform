@@ -1,0 +1,6 @@
+<section class="profile">
+  <p class="eyebrow">ACCOUNT</p><h2>Profile</h2>
+  <div class="form-grid"><input [(ngModel)]="name" placeholder="Display name"><input [ngModel]="email" readonly placeholder="Email"><input [(ngModel)]="avatar" placeholder="Avatar URL"></div>
+  <button (click)="save()">Update profile</button>
+  <p class="error" *ngIf="error">{{ error }}</p><p class="message" *ngIf="message">{{ message }}</p>
+</section>

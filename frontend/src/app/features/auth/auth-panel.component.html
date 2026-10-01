@@ -1,0 +1,94 @@
+<section class="panel">
+  @if (signedIn) {
+    <h2>Signed in</h2>
+    <button type="button" (click)="reloadProfile()" [disabled]="profileBusy">GET /me</button>
+    <button type="button" (click)="logout()">Sign out</button>
+
+    @if (loginResponse !== null) {
+      <h3>POST /auth/login response</h3>
+      <pre>{{ loginResponse | json }}</pre>
+    }
+
+    <h3>GET /me response</h3>
+    @if (profileBusy) {
+      <p>Loading profile...</p>
+    } @else if (profileError !== '') {
+      <p class="error">{{ profileError }}</p>
+    } @else if (profileResponse !== null) {
+      <pre>{{ profileResponse | json }}</pre>
+    } @else {
+      <p>No profile response yet.</p>
+    }
+
+    <h3>PUT /me</h3>
+    <form (ngSubmit)="saveProfile()">
+      <label>
+        Name
+        <input name="name" [(ngModel)]="name" required maxlength="100">
+      </label>
+      <label>
+        Avatar URL
+        <input name="avatar" [(ngModel)]="avatar" maxlength="2048">
+      </label>
+      <button type="submit" [disabled]="busy">Update profile</button>
+    </form>
+
+    @if (updateResponse !== null) {
+      <h3>PUT /me response</h3>
+      <pre>{{ updateResponse | json }}</pre>
+    }
+  } @else {
+    @if (mode === 'login') {
+      <h2>Login</h2>
+      <form #loginForm="ngForm" (ngSubmit)="submitLogin()">
+        <label>
+          Email
+          <input name="email" type="email" [(ngModel)]="email" required maxlength="254">
+        </label>
+        <label>
+          Password
+          <input name="password" type="password" [(ngModel)]="password" required>
+        </label>
+        <button type="submit" [disabled]="busy || loginForm.invalid">Login</button>
+      </form>
+      <p>Need an account? <button type="button" (click)="showRegistration()">Register</button></p>
+    } @else {
+      <h2>Register</h2>
+      <form #registerForm="ngForm" (ngSubmit)="submitRegistration()">
+        <label>
+          Name
+          <input name="name" [(ngModel)]="name" required maxlength="100">
+        </label>
+        <label>
+          Email
+          <input name="email" type="email" [(ngModel)]="email" required maxlength="254">
+        </label>
+        <label>
+          Password
+          <input name="password" type="password" [(ngModel)]="password" required minlength="8" maxlength="72">
+        </label>
+        <label>
+          Account role
+          <select name="role" [(ngModel)]="role">
+            <option value="CLIENT">Client / user</option>
+            <option value="SELLER">Seller</option>
+          </select>
+        </label>
+        <button type="submit" [disabled]="busy || registerForm.invalid">Register</button>
+      </form>
+      <p>Already registered? <button type="button" (click)="showLogin()">Login</button></p>
+    }
+
+    @if (registerResponse !== null) {
+      <h3>POST /auth/register response</h3>
+      <pre>{{ registerResponse | json }}</pre>
+    }
+  }
+
+  @if (errorMessage !== '') {
+    <p class="error">{{ errorMessage }}</p>
+  }
+  @if (message !== '') {
+    <p>{{ message }}</p>
+  }
+</section>
