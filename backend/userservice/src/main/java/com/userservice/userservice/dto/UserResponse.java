@@ -1,7 +1,5 @@
 package com.userservice.userservice.dto;
 
-import com.userservice.userservice.model.User;
-
 public class UserResponse {
     private String id;
     private String email;
@@ -18,15 +16,6 @@ public class UserResponse {
         this.name = name;
         this.role = role;
         this.avatar = avatar;
-    }
-
-    public static UserResponse from(User user) {
-        return new UserResponse(
-                user.getId(),
-                user.getEmail(),
-                user.getName(),
-                user.getRole() == null ? null : user.getRole().name(),
-                user.getAvatar());
     }
 
     public String getId() {

@@ -1,6 +1,6 @@
 package com.userservice.userservice.dto;
 
-import com.userservice.userservice.model.Role;
+import com.userservice.userservice.entity.Role;
 
 public class LoginResponse {
     private String token;

@@ -11,8 +11,8 @@ import com.userservice.userservice.dto.LoginRequest;
 import com.userservice.userservice.dto.LoginResponse;
 import com.userservice.userservice.dto.RegisterRequest;
 import com.userservice.userservice.dto.RegisterResponse;
-import com.userservice.userservice.exceptions.EmailAlreadyExistsException;
-import com.userservice.userservice.model.User;
+import com.userservice.userservice.exception.DuplicateResourceException;
+import com.userservice.userservice.entity.User;
 import com.userservice.userservice.repository.UserRepository;
 import com.userservice.userservice.security.JwtService;
 
@@ -31,7 +31,7 @@ public class AuthService {
     public RegisterResponse register(RegisterRequest request) {
         String email = request.getEmail().trim().toLowerCase(Locale.ROOT);
         if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyExistsException("Email is already in use");
+            throw new DuplicateResourceException("Email is already in use");
         }
 
         User user = new User();
@@ -63,7 +63,7 @@ public class AuthService {
                 .roles(user.getRole().name())
                 .build();
 
-        String token = jwtService.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails, user.getId());
         return new LoginResponse(token, user.getEmail(), user.getRole());
     }
 }

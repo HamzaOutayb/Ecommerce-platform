@@ -5,10 +5,10 @@ spring:
   application:
     name: user-service
   mongodb:
-    uri: ${SPRING_MONGODB_URI:${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/buy-01-db}}
+    uri: ${SPRING_MONGODB_URI:${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/user-service-db}}
   data:
     mongodb:
-      uri: ${SPRING_MONGODB_URI:${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/buy-01-db}}
+      uri: ${SPRING_MONGODB_URI:${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/user-service-db}}
       auto-index-creation: true
   servlet:
     multipart:

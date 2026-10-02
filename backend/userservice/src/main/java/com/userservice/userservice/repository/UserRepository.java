@@ -1,7 +1,7 @@
 package com.userservice.userservice.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import com.userservice.userservice.model.User;
+import com.userservice.userservice.entity.User;
 import java.util.Optional;
 
 public interface UserRepository  extends MongoRepository<User, String> {

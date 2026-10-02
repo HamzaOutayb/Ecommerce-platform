@@ -1,13 +1,12 @@
 package com.userservice.userservice.service;
 
 import java.util.Locale;
-import java.util.NoSuchElementException;
-
 import org.springframework.stereotype.Service;
 
 import com.userservice.userservice.dto.UserResponse;
 import com.userservice.userservice.dto.UserUpdateRequest;
-import com.userservice.userservice.model.User;
+import com.userservice.userservice.exception.ResourceNotFoundException;
+import com.userservice.userservice.entity.User;
 import com.userservice.userservice.repository.UserRepository;
 
 @Service
@@ -19,7 +18,14 @@ public class UserService {
     }
 
     public UserResponse getProfile(String email) {
-        return UserResponse.from(findByEmail(email));
+        User user = findByEmail(email);
+        UserResponse response = new UserResponse();
+        response.setId(user.getId());
+        response.setEmail(user.getEmail());
+        response.setName(user.getName());
+        response.setRole(user.getRole() == null ? null : user.getRole().name());
+        response.setAvatar(user.getAvatar());
+        return response;
     }
 
     public UserResponse updateProfile(String email, UserUpdateRequest request) {
@@ -30,13 +36,19 @@ public class UserService {
             String avatar = request.getAvatar().trim();
             user.setAvatar(avatar.isEmpty() ? null : avatar);
         }
-
-        return UserResponse.from(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+        UserResponse response = new UserResponse();
+        response.setId(savedUser.getId());
+        response.setEmail(savedUser.getEmail());
+        response.setName(savedUser.getName());
+        response.setRole(savedUser.getRole() == null ? null : savedUser.getRole().name());
+        response.setAvatar(savedUser.getAvatar());
+        return response;
     }
 
     private User findByEmail(String email) {
         String normalizedEmail = email.trim().toLowerCase(Locale.ROOT);
         return userRepository.findByEmail(normalizedEmail)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

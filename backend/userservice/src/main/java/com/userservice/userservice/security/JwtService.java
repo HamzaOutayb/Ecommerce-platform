@@ -22,18 +22,21 @@ public class JwtService {
     @Value("${security.jwt.expiration-ms}")
     private long jwtExpiration;
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, String userId) {
+        if (userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("A user ID is required to issue an access token");
+        }
         String role = userDetails.getAuthorities().stream().findFirst()
                 .map(authority -> authority.getAuthority())
                 .orElse("ROLE_CLIENT");
 
-        return Jwts.builder()
+        var builder = Jwts.builder()
                 .subject(userDetails.getUsername())
                 .claim("role", role)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSigningKey())
-                .compact();
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration));
+        builder.claim("userId", userId);
+        return builder.signWith(getSigningKey()).compact();
     }
 
     public String extractEmail(String token) {

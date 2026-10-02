@@ -5,11 +5,11 @@ spring:
   application:
     name: user-service-test
   mongodb:
-    uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/buy-01-test}
+    uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/user-service-test-db}
   data:
     mongodb:
-      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/buy-01-test}
-      auto-index-creation: true
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/user-service-test-db}
+      auto-index-creation: false
 
 eureka:
   client:

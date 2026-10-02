@@ -1,7 +1,6 @@
 package com.userservice.userservice.controller;
 
-import java.security.Principal;
-
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,12 +21,12 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public UserResponse getProfile(Principal principal) {
-        return userService.getProfile(principal.getName());
+    public UserResponse getProfile(Authentication authentication) {
+        return userService.getProfile(authentication.getName());
     }
 
     @PutMapping("/me")
-    public UserResponse updateProfile(Principal principal, @Valid @RequestBody UserUpdateRequest request) {
-        return userService.updateProfile(principal.getName(), request);
+    public UserResponse updateProfile(Authentication authentication, @Valid @RequestBody UserUpdateRequest request) {
+        return userService.updateProfile(authentication.getName(), request);
     }
 }
