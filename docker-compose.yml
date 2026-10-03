@@ -1,18 +1,17 @@
 services:
-  mongodb:
+  user-mongodb:
     image: mongo:7.0.14
-    container_name: buy-01-db
+    container_name: user-service-mongodb
     ports:
       - "27017:27017"
     volumes:
-      - mongodb_data:/data/db
+      - user_mongodb_data:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 20s
-
   eureka-server:
     build:
       context: ./backend/eureka-server
@@ -35,34 +34,15 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_MONGODB_URI: mongodb://mongodb:27017/buy-01-db
+      SPRING_MONGODB_URI: mongodb://user-mongodb:27017/user-service-db
       JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
     depends_on:
-      mongodb:
+      user-mongodb:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8081/actuator/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 90s
-
-  product-service:
-    build:
-      context: ./backend/productservice
-      dockerfile: Dockerfile
-    container_name: product-service
-    ports:
-      - "8082:8082"
-    environment:
-      JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8082/actuator/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -81,8 +61,6 @@ services:
       eureka-server:
         condition: service_healthy
       user-service:
-        condition: service_healthy
-      product-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1"]
@@ -103,4 +81,7 @@ services:
         condition: service_healthy
 
 volumes:
-  mongodb_data:
+  user_mongodb_data:
+  product_mongodb_data:
+  media_mongodb_data:
+  media_object_storage_data:

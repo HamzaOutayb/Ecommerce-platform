@@ -1,5 +1,13 @@
 <main>
-  <h1>User service</h1>
-  <p>Register, sign in, and check the protected profile endpoints.</p>
+  <header class="page-header">
+    <div><p class="eyebrow">BUY 01 MARKETPLACE</p><h1>Products</h1></div>
+    <p>Browse the catalogue and manage listings with a seller account.</p>
+  </header>
   <app-auth-panel></app-auth-panel>
+  <app-catalog></app-catalog>
+  @if (auth.isSeller) {
+    <app-seller-dashboard></app-seller-dashboard>
+  } @else {
+    <p class="seller-note">Sign in with a seller account to create, update, or delete products.</p>
+  }
 </main>

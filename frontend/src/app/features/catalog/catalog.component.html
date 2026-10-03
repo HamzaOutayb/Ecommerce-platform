@@ -3,9 +3,8 @@
   <p class="error" *ngIf="error">{{ error }}</p>
   <div class="products">
     <article *ngFor="let item of products">
-      <img *ngIf="media[item.id]?.length" [src]="media[item.id][0].imagePath" [alt]="item.name">
-      <span class="dot" *ngIf="!media[item.id]?.length"></span>
-      <small class="error" *ngIf="mediaErrors[item.id]">Images unavailable</small>
+      <img *ngIf="item.imagePaths?.length" [src]="item.imagePaths?.[0]" [alt]="item.name">
+      <span class="dot" *ngIf="!item.imagePaths?.length">No image</span>
       <h3>{{ item.name }}</h3><p>{{ item.description }}</p><strong>{{ item.price | currency }}</strong><small>{{ item.quantity }} available</small>
     </article>
   </div>
