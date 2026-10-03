@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: product-service
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/productdb}
+      auto-index-creation: true
+
+jwt:
+  secret: ${JWT_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+# TODO: Add Eureka registration later
