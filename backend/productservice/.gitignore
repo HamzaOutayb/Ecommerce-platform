@@ -31,6 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
-**/src/main/java/com/example/productservice/security/*
 **/src/main/java/com/example/productservice/mapper/*
 **/src/main/java/com/example/productservice/config/*
