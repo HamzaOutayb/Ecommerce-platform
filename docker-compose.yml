@@ -12,13 +12,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
-  productservice-mongodb:
+  product-mongodb:
     image: mongo:7.0.14
     container_name: product-service-mongodb
     ports:
       - "27018:27017"
     volumes:
-      - productservice_mongodb_data:/data/db
+      - product_mongodb_data:/data/db
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27018/test --quiet
       interval: 10s
@@ -70,10 +70,10 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_MONGODB_URI: mongodb://productservice-mongodb:27017/product-service-db
+      SPRING_MONGODB_URI: mongodb://product-mongodb:27017/product-service-db
       JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
     depends_on:
-      productservice-mongodb:
+      product-mongodb:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
