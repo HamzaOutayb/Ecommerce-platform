@@ -1,6 +1,8 @@
 package com.userservice.userservice.controller;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,5 +30,11 @@ public class UserController {
     @PutMapping("/me")
     public UserResponse updateProfile(Authentication authentication, @Valid @RequestBody UserUpdateRequest request) {
         return userService.updateProfile(authentication.getName(), request);
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteProfile(Authentication authentication) {
+        userService.deleteProfile(authentication.getName());
+        return ResponseEntity.noContent().build();
     }
 }
