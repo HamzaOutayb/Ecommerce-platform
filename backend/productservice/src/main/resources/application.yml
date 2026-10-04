@@ -4,14 +4,16 @@ server:
 spring:
   application:
     name: product-service
+
   data:
     mongodb:
+      uri: ${SPRING_MONGODB_URI:${MONGODB_URI:mongodb://localhost:27018/productdb}}
       auto-index-creation: true
-  mongodb:
-    uri: ${MONGODB_URI:mongodb://localhost:27018/productdb}
 
-jwt:
-  secret: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
+security:
+  jwt:
+    secret: ${JWT_SECRET:change-this-development-secret-key-which-is-long-enough}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
 
 eureka:
   client:
@@ -19,6 +21,7 @@ eureka:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://eureka-server:8761/eureka}
     register-with-eureka: true
     fetch-registry: true
+
   instance:
     prefer-ip-address: true
     hostname: ${EUREKA_INSTANCE_HOSTNAME:product-service}
@@ -27,5 +30,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info
-# TODO: Add Eureka registration later
+        include: health,info
