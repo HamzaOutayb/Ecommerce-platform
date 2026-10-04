@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: user-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      acks: all
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
   mongodb:
     uri: ${SPRING_MONGODB_URI:${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/user-service-db}}
   data:
@@ -21,6 +27,11 @@ security:
     expiration-ms: ${JWT_EXPIRATION_MS:86400000}
 media:
   avatar-root: ${MEDIA_AVATAR_ROOT:avatars}
+
+app:
+  kafka:
+    topics:
+      user-deleted: user.deleted
 
 eureka:
   client:
