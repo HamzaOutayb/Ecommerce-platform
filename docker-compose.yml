@@ -20,7 +20,20 @@ services:
     volumes:
       - product_mongodb_data:/data/db
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27018/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+  media-mongodb:
+    image: mongo:7.0.14
+    container_name: media-service-mongodb
+    ports:
+      - "27019:27017"
+    volumes:
+      - media_mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
       timeout: 5s
       retries: 5
@@ -47,10 +60,10 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_SHARE_COORDINATOR_STATE_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_SHARE_COORDINATOR_STATE_TOPIC_MIN_ISR: 1
-      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
       CLUSTER_ID: 4L6g3nShT-eMCtK--X86sw
     volumes:
-      - kafka_data:/tmp/kraft-combined-logs
+      - kafka_data:/var/lib/kafka/data
     healthcheck:
       test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
       interval: 10s
@@ -114,6 +127,27 @@ services:
         condition: service_healthy
     healthcheck:
       test: [ "CMD-SHELL", "curl -fsS http://localhost:8082/actuator/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 90s
+  media-service:
+    build:
+      context: ./backend/mediaservice
+      dockerfile: Dockerfile
+    container_name: media-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_MONGODB_URI: mongodb://media-mongodb:27017/media-service-db
+      JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
+    depends_on:
+      media-mongodb:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:8083/actuator/health || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 12
