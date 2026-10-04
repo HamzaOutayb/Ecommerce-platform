@@ -25,6 +25,8 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        System.out.println("Fetching all products");
+        System.out.println("ProductService: " + productService);
         return ResponseEntity.ok(productService.getAllProducts());
     }
 

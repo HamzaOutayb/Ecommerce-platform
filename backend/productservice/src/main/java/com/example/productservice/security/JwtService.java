@@ -17,10 +17,10 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     @Value("${security.jwt.secret}")
-    private String jwtSecret;
+    private String secret;
 
     @Value("${security.jwt.expiration-ms}")
-    private long jwtExpiration;
+    private long expirationMs;
 
     public String generateToken(UserDetails userDetails, String userId) {
         if (userId == null || userId.isBlank()) {
@@ -34,7 +34,7 @@ public class JwtService {
                 .subject(userDetails.getUsername())
                 .claim("role", role)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpiration));
+                .expiration(new Date(System.currentTimeMillis() + expirationMs));
         builder.claim("userId", userId);
         return builder.signWith(getSigningKey()).compact();
     }
@@ -76,6 +76,6 @@ public class JwtService {
     }
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 }
