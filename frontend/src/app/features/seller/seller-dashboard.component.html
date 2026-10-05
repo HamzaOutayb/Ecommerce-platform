@@ -1,11 +1,9 @@
 <section class="seller">
-
   <div class="section-header">
     <p class="eyebrow">SELLER DESK</p>
     <h2>{{ isEditing ? 'Edit listing' : 'Publish a listing' }}</h2>
   </div>
 
-  <!-- ── Product form ──────────────────────────────────────────────── -->
   <form class="product-form" (ngSubmit)="save()">
     <label>
       Product name
@@ -26,36 +24,10 @@
 
     <div class="btn-row">
       <button type="submit" class="btn-primary">{{ isEditing ? 'Save changes' : 'Publish product' }}</button>
-      <button type="button" *ngIf="isEditing" class="btn-secondary" (click)="reset()">Cancel</button>
+      <button type="button" class="btn-secondary" (click)="cancel()">Cancel</button>
     </div>
   </form>
 
-  <!-- ── Feedback ───────────────────────────────────────────────────── -->
-  @if (error !== '') {
-    <p class="msg-error">{{ error }}</p>
-  }
-  @if (successMessage !== '') {
-    <p class="msg-success">{{ successMessage }}</p>
-  }
-
-  <!-- ── Your listings ──────────────────────────────────────────────── -->
-  <div class="listings">
-    <h3>Your listings</h3>
-    @if (products.length === 0) {
-      <p class="muted">You have no listings yet.</p>
-    } @else {
-      <ul class="listing-list">
-        <li class="listing-item" *ngFor="let item of products">
-          <span class="listing-name">{{ item.name }}</span>
-          <div class="listing-actions">
-            <button type="button" class="btn-sm" (click)="edit(item)">Edit</button>
-            <button type="button" class="btn-sm btn-danger" (click)="remove(item.id)">Delete</button>
-          </div>
-        </li>
-      </ul>
-    }
-  </div>
-
-  <p class="muted note">Product images are managed by the media service.</p>
-
+  <p class="msg-error" *ngIf="error">{{ error }}</p>
+  <p class="msg-success" *ngIf="successMessage">{{ successMessage }}</p>
 </section>

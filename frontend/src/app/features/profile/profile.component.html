@@ -1,11 +1,14 @@
-<section class="profile">
-
+<section class="profile" *ngIf="!loading">
   <div class="section-header">
     <p class="eyebrow">ACCOUNT</p>
     <h2>Profile</h2>
   </div>
 
   <form class="profile-form" (ngSubmit)="save()">
+    <label>
+      Role
+      <input [ngModel]="role" name="role" readonly>
+    </label>
     <label>
       Display name
       <input [(ngModel)]="name" name="name" placeholder="Your name" required>
@@ -24,4 +27,23 @@
   <p class="msg-error" *ngIf="error">{{ error }}</p>
   <p class="msg-success" *ngIf="successMessage">{{ successMessage }}</p>
 
+  <div *ngIf="role === 'SELLER'" class="seller-controls">
+    <h3>Seller Dashboard</h3>
+    <a routerLink="/seller/products/new" class="btn-primary">Add Product</a>
+
+    <div class="listings" style="margin-top: 1rem;">
+      <h4>Your listings</h4>
+      <p class="muted" *ngIf="sellerProducts.length === 0">You have no listings yet.</p>
+      <ul class="listing-list" *ngIf="sellerProducts.length > 0">
+        <li class="listing-item" *ngFor="let item of sellerProducts" style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
+          <span class="listing-name">{{ item.name }}</span>
+          <div class="listing-actions" style="display: flex; gap: 0.5rem;">
+            <a [routerLink]="['/seller/products', item.id, 'edit']" class="btn-sm" style="text-decoration: none; padding: 0.2rem 0.5rem; background: #ddd; color: black; border-radius: 4px;">Edit</a>
+            <button type="button" class="btn-sm btn-danger" (click)="deleteProduct(item.id)" style="padding: 0.2rem 0.5rem; background: red; color: white; border: none; border-radius: 4px; cursor: pointer;">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </section>
+<div *ngIf="loading">Loading profile...</div>

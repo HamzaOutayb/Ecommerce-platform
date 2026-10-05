@@ -10,7 +10,7 @@
   } @else if (error) {
     <p class="msg-error">{{ error }}</p>
   } @else if (products.length === 0) {
-    <p class="muted">No products available yet.</p>
+    <p class="muted">No products available</p>
   } @else {
     <div class="product-grid">
       <article class="product-card" *ngFor="let item of products">

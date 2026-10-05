@@ -69,3 +69,5 @@
 
 .msg-error   { color: #c0392b; font-size: 14px; margin: 10px 0; }
 .msg-success { color: #1a7f37; font-size: 14px; margin: 10px 0; }
+
+.seller-controls { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #ddd; }

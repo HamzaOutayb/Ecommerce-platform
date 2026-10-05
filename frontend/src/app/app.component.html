@@ -1,25 +1,2 @@
-<main>
-
-  <!-- ── Page header ────────────────────────────────────────────────── -->
-  <header class="page-header">
-    <div>
-      <p class="eyebrow">BUY 01 MARKETPLACE</p>
-      <h1>Products</h1>
-    </div>
-    <p class="header-tagline">Browse listings and manage your seller account.</p>
-  </header>
-
-  <!-- ── Auth panel (login / profile) ──────────────────────────────── -->
-  <app-auth-panel></app-auth-panel>
-
-  <!-- ── Product catalogue ──────────────────────────────────────────── -->
-  <app-catalog></app-catalog>
-
-  <!-- ── Seller dashboard (visible to SELLER role only) ────────────── -->
-  @if (auth.isSeller) {
-    <app-seller-dashboard></app-seller-dashboard>
-  } @else {
-    <p class="seller-note">Sign in with a seller account to create, update, or delete products.</p>
-  }
-
-</main>
+<app-header></app-header>
+<router-outlet></router-outlet>
