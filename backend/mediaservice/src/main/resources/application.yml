@@ -34,3 +34,7 @@ management:
     web:
       exposure:
         include: health,info
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:do1ffwghn}
+  api-key: ${CLOUDINARY_API_KEY:689432687486435}
+  api-secret: ${CLOUDINARY_API_SECRET:01CmFKQMUI_5POHgLcJioUur7iA}
