@@ -164,3 +164,119 @@
 .msg-success { color: #1a7f37; font-size: 14px; margin: 10px 0; }
 .muted       { color: #888; font-size: 14px; }
 .note        { margin-top: 20px; }
+
+/* ── Image upload ──────────────────────────────────────────────────────────── */
+.image-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.image-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.preview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.preview-item {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.remove-btn:hover {
+  background: rgba(192,57,43,0.85);
+}
+
+.file-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.file-picker-btn {
+  display: inline-block;
+  padding: 7px 14px;
+  background: #f0edfb;
+  color: #6750a4;
+  border: 1px dashed #9e8ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+.file-picker:hover .file-picker-btn {
+  background: #e3ddfa;
+}
+
+.btn-primary:disabled {
+  background: #b0a0d1;
+  cursor: not-allowed;
+}
+
+/* ── Toast notification ────────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+  z-index: 9999;
+  animation: toast-slide-in 0.3s ease;
+}
+
+.toast-success {
+  background: #1a7f37;
+  color: #fff;
+}
+
+.toast-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+@keyframes toast-slide-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -12,8 +12,8 @@ spring:
       auto-index-creation: true
   servlet:
     multipart:
-      max-file-size: 2MB
-      max-request-size: 3MB
+      max-file-size: 10MB
+      max-request-size: 50MB
 
 security:
   jwt:
@@ -36,5 +36,5 @@ management:
         include: health,info
 cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME:do1ffwghn}
-  api-key: ${CLOUDINARY_API_KEY:689432687486435}
-  api-secret: ${CLOUDINARY_API_SECRET:01CmFKQMUI_5POHgLcJioUur7iA}
+  api-key: ${CLOUDINARY_API_KEY:391888276776149}
+  api-secret: ${CLOUDINARY_API_SECRET:5R7Te9OoZLM8XmXjdDLDanAIuNo}

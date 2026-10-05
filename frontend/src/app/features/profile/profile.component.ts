@@ -50,7 +50,7 @@ export class ProfileComponent implements OnInit {
   loadSellerProducts(): void {
     this.productService.list().subscribe({
       next: products => {
-        this.sellerProducts = products.filter(p => p.userId === this.userId);
+        this.sellerProducts = products.filter(p => p.sellerId === this.userId);
       }
     });
   }

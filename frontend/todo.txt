@@ -1,2 +1,7 @@
 product crud front end :
 creating product logique
+
+fix the creation of product process make it 
+first sending images to /media/images and  waiting for it to get uploaded into cloudinary and return urls 
+then send product info for product service dont redirect to other places after the submition 
+(check the backend services also )  

@@ -15,8 +15,8 @@
     <div class="product-grid">
       <article class="product-card" *ngFor="let item of products">
         <div class="product-image">
-          <img *ngIf="item.imagePaths?.length" [src]="item.imagePaths![0]" [alt]="item.name">
-          <span class="no-image" *ngIf="!item.imagePaths?.length">No image</span>
+          <img *ngIf="item.imageUrls?.length" [src]="item.imageUrls![0]" [alt]="item.name">
+          <span class="no-image" *ngIf="!item.imageUrls?.length">No image</span>
         </div>
         <div class="product-body">
           <h3 class="product-name">{{ item.name }}</h3>

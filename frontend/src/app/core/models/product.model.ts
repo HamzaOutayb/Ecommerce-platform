@@ -6,8 +6,8 @@ export interface Product {
   description: string;
   price: number;
   quantity: number;
-  userId: string;
-  imagePaths?: string[];
+  sellerId: string;
+  imageUrls?: string[];
 }
 
 export interface ProductInput {
@@ -15,4 +15,5 @@ export interface ProductInput {
   description: string;
   price: number;
   quantity: number;
+  imageUrls?: string[];
 }
