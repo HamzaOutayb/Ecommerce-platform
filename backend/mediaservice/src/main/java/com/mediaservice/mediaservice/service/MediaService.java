@@ -42,8 +42,6 @@ public class MediaService {
 
                 Media media = new Media();
                 media.setImagePath(imagePath);
-                media.setProductId(null);
-
                 mediaRepository.save(media);
 
                 imagePaths.add(imagePath);

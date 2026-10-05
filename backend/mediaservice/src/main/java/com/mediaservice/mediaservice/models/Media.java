@@ -16,6 +16,4 @@ public class Media {
     private String id;
 
     private String imagePath;
-
-    private String productId;
 }
