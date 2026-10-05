@@ -1,17 +1,25 @@
 package com.example.productservice.controller;
 
+import java.net.URI;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.example.productservice.dto.ProductRequest;
 import com.example.productservice.dto.ProductResponse;
 import com.example.productservice.service.ProductService;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/products")
@@ -37,8 +45,8 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request,
-                                                         @AuthenticationPrincipal Jwt jwt) {
-        String sellerId = jwt.getSubject();
+                                                         Authentication authentication) {
+        String sellerId = authentication.getName();
         ProductResponse response = productService.createProduct(request, sellerId);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -50,16 +58,16 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable String id,
                                                          @Valid @RequestBody ProductRequest request,
-                                                         @AuthenticationPrincipal Jwt jwt) {
-        String sellerId = jwt.getSubject();
+                                                         Authentication authentication) {
+        String sellerId = authentication.getName();
         ProductResponse response = productService.updateProduct(id, request, sellerId);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id,
-                                              @AuthenticationPrincipal Jwt jwt) {
-        String sellerId = jwt.getSubject();
+                                              Authentication authentication) {
+        String sellerId = authentication.getName();
         productService.deleteProduct(id, sellerId);
         return ResponseEntity.noContent().build();
     }

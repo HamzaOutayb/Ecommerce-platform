@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -38,11 +39,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authorization.substring(7);
         try {
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                AuthenticatedUser user = jwtService.parseAuthenticatedUser(token);
+                Claims claims = jwtService.parseClaims(token);
+                String userId = claims.get("userId", String.class);
+                String role = claims.get("role", String.class);
                 var authentication = new UsernamePasswordAuthenticationToken(
-                        user,
+                    userId,
                         null,
-                        List.of(new SimpleGrantedAuthority(user.getRole())));
+                    List.of(new SimpleGrantedAuthority(role)));
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

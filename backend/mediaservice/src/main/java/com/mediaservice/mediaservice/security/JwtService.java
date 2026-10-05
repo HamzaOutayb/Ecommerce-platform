@@ -21,25 +21,25 @@ public class JwtService {
     @Value("${security.jwt.secret}")
     private String jwtSecret;
 
-    public AuthenticatedUser parseAuthenticatedUser(String token) {
+    public Claims parseClaims(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
 
-        String email = claims.getSubject();
+        String subject = claims.getSubject();
         String userId = claims.get("userId", String.class);
         String role = claims.get("role", String.class);
         Date expiration = claims.getExpiration();
 
-        if (email == null || email.isBlank() || userId == null || userId.isBlank()
+        if (subject == null || subject.isBlank() || userId == null || userId.isBlank()
                 || !ALLOWED_ROLES.contains(role)
                 || expiration == null || !expiration.after(new Date())) {
             throw new JwtException("JWT is missing required or valid claims");
         }
 
-        return new AuthenticatedUser(userId, email, role);
+        return claims;
     }
 
     private SecretKey getSigningKey() {

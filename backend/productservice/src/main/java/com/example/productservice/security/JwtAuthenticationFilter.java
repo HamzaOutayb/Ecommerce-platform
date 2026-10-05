@@ -49,21 +49,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authorization.substring(7);
 
         try {
-            String email = jwtService.extractEmail(token);
-
-            if (email != null
-                    && !email.isBlank()
-                    && SecurityContextHolder.getContext().getAuthentication() == null
+            if (SecurityContextHolder.getContext().getAuthentication() == null
                     && jwtService.isTokenValid(token)) {
+                String userId = jwtService.extractUserId(token);
+                String role = jwtService.extractRole(token);
 
-                var authentication = new UsernamePasswordAuthenticationToken(
-                        email,
-                        null,
-                        AuthorityUtils.NO_AUTHORITIES);
+                if (userId != null && !userId.isBlank()) {
+                    var authentication = new UsernamePasswordAuthenticationToken(
+                            userId,
+                            null,
+                            AuthorityUtils.createAuthorityList(role));
 
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(authentication);
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(authentication);
+                }
             }
 
         } catch (JwtException | IllegalArgumentException exception) {

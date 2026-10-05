@@ -17,8 +17,8 @@ public class JwtService {
     @Value("${security.jwt.secret}")
     private String jwt_secret;
 
-    public String extractEmail(String token) {
-        return extractClaims(token).getSubject();
+    public String extractUserId(String token) {
+        return extractClaims(token).get("userId", String.class);
     }
 
     public String extractRole(String token) {

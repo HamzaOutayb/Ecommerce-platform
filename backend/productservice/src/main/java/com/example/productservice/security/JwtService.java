@@ -48,6 +48,10 @@ public class JwtService {
         return role != null ? role : "ROLE_CLIENT";
     }
 
+    public String extractUserId(String token) {
+        return extractClaims(token).get("userId", String.class);
+    }
+
     public boolean isTokenValid(String token, UserDetails userDetails) {
         String email = extractEmail(token);
         return email != null && email.equalsIgnoreCase(userDetails.getUsername())
