@@ -1,27 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { LoginResponse, RegisterResponse, UserProfile, RegisterRequest } from '../models/user.model';
 
-export interface UserProfile {
-  id: string;
-  email: string;
-  name: string;
-  role: 'CLIENT' | 'SELLER';
-  avatar: string | null;
-}
-
-export interface LoginResponse {
-  token: string;
-  email: string;
-  role: 'CLIENT' | 'SELLER';
-}
-
-export interface RegisterResponse {
-  id: string;
-  name: string;
-  email: string;
-  role: 'CLIENT' | 'SELLER';
-}
+// Re-export models so existing imports from auth.service still compile
+export type { UserProfile, LoginResponse, RegisterResponse };
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -55,8 +38,8 @@ export class AuthService {
     );
   }
 
-  register(email: string, password: string, name: string, role: 'CLIENT' | 'SELLER'): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>('/auth/register', { email, password, name, role });
+  register(req: RegisterRequest): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>('/auth/register', req);
   }
 
   loadProfile(): Observable<UserProfile> {
@@ -82,10 +65,7 @@ export class AuthService {
 
   private get tokenRole(): string {
     const token = this.token;
-    if (token === null) {
-      return '';
-    }
-
+    if (token === null) { return ''; }
     try {
       const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
       return payload.role || '';

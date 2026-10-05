@@ -1,6 +1,27 @@
 <section class="profile">
-  <p class="eyebrow">ACCOUNT</p><h2>Profile</h2>
-  <div class="form-grid"><input [(ngModel)]="name" placeholder="Display name"><input [ngModel]="email" readonly placeholder="Email"><input [(ngModel)]="avatar" placeholder="Avatar URL"></div>
-  <button (click)="save()">Update profile</button>
-  <p class="error" *ngIf="error">{{ error }}</p><p class="message" *ngIf="message">{{ message }}</p>
+
+  <div class="section-header">
+    <p class="eyebrow">ACCOUNT</p>
+    <h2>Profile</h2>
+  </div>
+
+  <form class="profile-form" (ngSubmit)="save()">
+    <label>
+      Display name
+      <input [(ngModel)]="name" name="name" placeholder="Your name" required>
+    </label>
+    <label>
+      Email
+      <input [ngModel]="email" name="email" type="email" readonly>
+    </label>
+    <label>
+      Avatar URL
+      <input [(ngModel)]="avatar" name="avatar" placeholder="https://…">
+    </label>
+    <button type="submit" class="btn-primary">Update profile</button>
+  </form>
+
+  <p class="msg-error" *ngIf="error">{{ error }}</p>
+  <p class="msg-success" *ngIf="successMessage">{{ successMessage }}</p>
+
 </section>

@@ -33,8 +33,6 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
-        System.out.println("Fetching all products");
-        System.out.println("ProductService: " + productService);
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
@@ -45,20 +43,16 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request,
-                                                         Authentication authentication) {
+            Authentication authentication) {
         String sellerId = authentication.getName();
         ProductResponse response = productService.createProduct(request, sellerId);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(response.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable String id,
-                                                         @Valid @RequestBody ProductRequest request,
-                                                         Authentication authentication) {
+            @Valid @RequestBody ProductRequest request,
+            Authentication authentication) {
         String sellerId = authentication.getName();
         ProductResponse response = productService.updateProduct(id, request, sellerId);
         return ResponseEntity.ok(response);
@@ -66,7 +60,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id,
-                                              Authentication authentication) {
+            Authentication authentication) {
         String sellerId = authentication.getName();
         productService.deleteProduct(id, sellerId);
         return ResponseEntity.noContent().build();

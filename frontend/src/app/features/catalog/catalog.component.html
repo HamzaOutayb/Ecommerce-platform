@@ -1,11 +1,33 @@
 <section class="catalog">
-  <div class="section-title"><p class="eyebrow">CATALOGUE</p><h2>Latest listings</h2></div>
-  <p class="error" *ngIf="error">{{ error }}</p>
-  <div class="products">
-    <article *ngFor="let item of products">
-      <img *ngIf="item.imagePaths?.length" [src]="item.imagePaths?.[0]" [alt]="item.name">
-      <span class="dot" *ngIf="!item.imagePaths?.length">No image</span>
-      <h3>{{ item.name }}</h3><p>{{ item.description }}</p><strong>{{ item.price | currency }}</strong><small>{{ item.quantity }} available</small>
-    </article>
+
+  <div class="section-header">
+    <p class="eyebrow">CATALOGUE</p>
+    <h2>Latest listings</h2>
   </div>
+
+  @if (loading) {
+    <p class="muted">Loading products…</p>
+  } @else if (error) {
+    <p class="msg-error">{{ error }}</p>
+  } @else if (products.length === 0) {
+    <p class="muted">No products available yet.</p>
+  } @else {
+    <div class="product-grid">
+      <article class="product-card" *ngFor="let item of products">
+        <div class="product-image">
+          <img *ngIf="item.imagePaths?.length" [src]="item.imagePaths![0]" [alt]="item.name">
+          <span class="no-image" *ngIf="!item.imagePaths?.length">No image</span>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">{{ item.name }}</h3>
+          <p class="product-desc">{{ item.description }}</p>
+          <div class="product-footer">
+            <strong class="product-price">{{ item.price | currency }}</strong>
+            <small class="product-qty">{{ item.quantity }} in stock</small>
+          </div>
+        </div>
+      </article>
+    </div>
+  }
+
 </section>

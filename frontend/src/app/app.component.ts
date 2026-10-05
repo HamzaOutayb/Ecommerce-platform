@@ -4,6 +4,9 @@ import { CatalogComponent } from './features/catalog/catalog.component';
 import { SellerDashboardComponent } from './features/seller/seller-dashboard.component';
 import { AuthService } from './core/auth/auth.service';
 
+// ─── App shell (root controller) ────────────────────────────────────────────
+// Responsible only for routing high-level view visibility based on auth state.
+
 @Component({
   selector: 'app-root',
   standalone: true,

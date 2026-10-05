@@ -1,18 +1,61 @@
 <section class="seller">
-  <p class="eyebrow">SELLER DESK</p>
-  @if (editingId) {
-    <h2>Edit listing</h2>
-  } @else {
-    <h2>Publish a listing</h2>
+
+  <div class="section-header">
+    <p class="eyebrow">SELLER DESK</p>
+    <h2>{{ isEditing ? 'Edit listing' : 'Publish a listing' }}</h2>
+  </div>
+
+  <!-- ── Product form ──────────────────────────────────────────────── -->
+  <form class="product-form" (ngSubmit)="save()">
+    <label>
+      Product name
+      <input [(ngModel)]="draft.name" name="name" placeholder="e.g. Wireless headphones" maxlength="120" required>
+    </label>
+    <label>
+      Price (USD)
+      <input [(ngModel)]="draft.price" name="price" type="number" min="0.01" step="0.01" placeholder="0.00" required>
+    </label>
+    <label>
+      Quantity
+      <input [(ngModel)]="draft.quantity" name="quantity" type="number" min="0" step="1" placeholder="0" required>
+    </label>
+    <label class="span-2">
+      Description
+      <textarea [(ngModel)]="draft.description" name="description" placeholder="Describe your product…" maxlength="2000" rows="3" required></textarea>
+    </label>
+
+    <div class="btn-row">
+      <button type="submit" class="btn-primary">{{ isEditing ? 'Save changes' : 'Publish product' }}</button>
+      <button type="button" *ngIf="isEditing" class="btn-secondary" (click)="reset()">Cancel</button>
+    </div>
+  </form>
+
+  <!-- ── Feedback ───────────────────────────────────────────────────── -->
+  @if (error !== '') {
+    <p class="msg-error">{{ error }}</p>
   }
-  <div class="form-grid"><input [(ngModel)]="product.name" placeholder="Product name" maxlength="120"><input [(ngModel)]="product.price" type="number" min="0.01" step="0.01" placeholder="Price"><input [(ngModel)]="product.quantity" type="number" min="0" step="1" placeholder="Quantity"><textarea [(ngModel)]="product.description" placeholder="Description" maxlength="2000"></textarea></div>
-  @if (editingId) {
-    <button class="primary" (click)="save()">Save changes</button>
-    <button (click)="reset()">Cancel</button>
-  } @else {
-    <button class="primary" (click)="save()">Publish product</button>
+  @if (successMessage !== '') {
+    <p class="msg-success">{{ successMessage }}</p>
   }
-  <div class="seller-products"><h3>Your products</h3><div *ngFor="let item of products" class="seller-product"><span>{{ item.name }}</span><div><button (click)="edit(item)">Edit</button><button (click)="remove(item.id)">Delete</button></div></div></div>
-  <p class="media-note">Product images will be managed by the media service.</p>
-  <p class="error" *ngIf="error">{{ error }}</p><p class="message" *ngIf="message">{{ message }}</p>
+
+  <!-- ── Your listings ──────────────────────────────────────────────── -->
+  <div class="listings">
+    <h3>Your listings</h3>
+    @if (products.length === 0) {
+      <p class="muted">You have no listings yet.</p>
+    } @else {
+      <ul class="listing-list">
+        <li class="listing-item" *ngFor="let item of products">
+          <span class="listing-name">{{ item.name }}</span>
+          <div class="listing-actions">
+            <button type="button" class="btn-sm" (click)="edit(item)">Edit</button>
+            <button type="button" class="btn-sm btn-danger" (click)="remove(item.id)">Delete</button>
+          </div>
+        </li>
+      </ul>
+    }
+  </div>
+
+  <p class="muted note">Product images are managed by the media service.</p>
+
 </section>
