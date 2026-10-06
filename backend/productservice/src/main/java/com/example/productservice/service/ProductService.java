@@ -7,6 +7,8 @@ import com.example.productservice.exception.ProductNotFoundException;
 import com.example.productservice.mapper.ProductMapper;
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.ProductRepository;
+
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +18,12 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final KafkaTemplate<List<String>, ProductDeletedEvent> kafkaTemplate;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper, KafkaTemplate<List<String>, ProductDeletedEvent> kafkaTemplate) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public List<ProductResponse> getAllProducts() {
@@ -44,11 +48,11 @@ public class ProductService {
     public ProductResponse updateProduct(String id, ProductRequest request, String sellerId) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
-        
+
         if (!product.getSellerId().equals(sellerId)) {
             throw new ForbiddenException("You are not the owner of this product");
         }
-        
+
         productMapper.updateEntityFromRequest(product, request);
         Product updatedProduct = productRepository.save(product);
         return productMapper.toResponse(updatedProduct);
@@ -57,11 +61,19 @@ public class ProductService {
     public void deleteProduct(String id, String sellerId) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
-        
+
         if (!product.getSellerId().equals(sellerId)) {
             throw new ForbiddenException("You are not the owner of this product");
         }
         
+        //sending the deleted product images to the media service to delete them from cloudinary via kafka
+        ProductDeletedEvent event = new ProductDeletedEvent(product.getImageUrls());
+        kafkaTemplate.send("images-deleted", product.getImageUrls(), event);
+
         productRepository.delete(product);
+    }
+
+    public record ProductDeletedEvent(
+            List<String> Imagepath) {
     }
 }

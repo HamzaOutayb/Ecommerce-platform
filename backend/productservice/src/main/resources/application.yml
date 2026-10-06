@@ -4,7 +4,10 @@ server:
 spring:
   application:
     name: product-service
-
+  
+  kafka:
+    bootstrap-servers: kafka:19092
+  
   data:
     mongodb:
       uri: ${SPRING_MONGODB_URI:${MONGODB_URI:mongodb://localhost:27018/productdb}}
