@@ -55,4 +55,45 @@ public class MediaService {
 
         return imagePaths;
     }
+
+    public void deleteImages(List<String> images) {
+        for (String imagePath : images) {
+            try {
+                String publicId = extractPublicId(imagePath);
+                
+                cloudinary.uploader().destroy(
+                        publicId,
+                        ObjectUtils.asMap(
+                                "resource_type", "image")
+                );
+    
+            mediaRepository.deleteByImagePath(imagePath);
+            } catch (IOException e) {
+                throw new MediaUploadException(
+                        "Failed to upload image",
+                        e);
+            }
+        }
+
+    }
+
+    private String extractPublicId(String imageUrl) {
+
+        String uploadMarker = "/upload/";
+        int uploadIndex = imageUrl.indexOf(uploadMarker);
+
+        String publicId = imageUrl.substring(
+                uploadIndex + uploadMarker.length());
+
+        // Remove version: v123456789/
+        publicId = publicId.replaceFirst("^v\\d+/", "");
+
+        // Remove extension
+        int extensionIndex = publicId.lastIndexOf(".");
+        if (extensionIndex != -1) {
+            publicId = publicId.substring(0, extensionIndex);
+        }
+
+        return publicId;
+    }
 }

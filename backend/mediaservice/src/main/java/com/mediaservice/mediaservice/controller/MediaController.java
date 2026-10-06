@@ -1,11 +1,11 @@
 package com.mediaservice.mediaservice.controller;
 
 import com.mediaservice.mediaservice.service.MediaService;
-
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,5 +27,13 @@ public class MediaController {
 
         List<String> imageUrls = mediaService.uploadImages(images);
         return ResponseEntity.ok(imageUrls);
+    }
+
+    @DeleteMapping("/images")
+    public ResponseEntity<List<String>> deleteImages(
+            @RequestParam("images") List<String> images) {
+
+       mediaService.deleteImages(images);
+        return ResponseEntity.ok().build();
     }
 }
