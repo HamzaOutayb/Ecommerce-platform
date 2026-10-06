@@ -1,0 +1,38 @@
+<section class="products-page">
+  <header class="products-heading">
+    <p class="eyebrow">CATALOG</p>
+    <h1>Products</h1>
+  </header>
+
+  @if (isLoading) {
+    <section class="empty-state empty-state-loading" aria-live="polite">
+      <p>Loading products...</p>
+    </section>
+  } @else if (hasError) {
+    <section class="empty-state" role="status">
+      <span class="empty-mark" aria-hidden="true"></span>
+      <div class="empty-copy">
+        <h2>Products could not be loaded</h2>
+        <p>Try again in a moment.</p>
+      </div>
+    </section>
+  } @else if (products.length === 0) {
+    <section class="empty-state">
+      <span class="empty-mark" aria-hidden="true"></span>
+      <div class="empty-copy">
+        <h2>No products yet</h2>
+        <p>Products will appear here once they are added.</p>
+      </div>
+    </section>
+  } @else {
+    <div class="product-list">
+      @for (product of products; track product.id) {
+        <article class="product-card">
+          <h2>{{ product.name }}</h2>
+          <p>{{ product.description }}</p>
+          <p class="price">{{ product.price }}</p>
+        </article>
+      }
+    </div>
+  }
+</section>

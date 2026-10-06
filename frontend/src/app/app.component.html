@@ -1,2 +1,18 @@
-<app-header></app-header>
-<router-outlet></router-outlet>
+<header class="site-header">
+  <nav class="site-nav" aria-label="Main navigation">
+    <a class="brand" routerLink="/products">Buy</a>
+
+    <div class="nav-actions">
+      @if (authenticated()) {
+        <a class="nav-button nav-button-primary" routerLink="/profile">Profile</a>
+      } @else {
+        <a class="nav-button" routerLink="/login">Sign in</a>
+        <a class="nav-button nav-button-primary" routerLink="/register">Register</a>
+      }
+    </div>
+  </nav>
+</header>
+
+<main class="page-content">
+  <router-outlet></router-outlet>
+</main>

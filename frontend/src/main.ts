@@ -1,14 +1,15 @@
 import 'zone.js';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
-import { authInterceptor } from './app/core/auth/auth.interceptor';
 import { provideRouter } from '@angular/router';
-import { routes } from './app/app.routes';
+import { AppComponent } from './app/app.component';
+import { routes } from './app/routes/app.routes';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(),
     provideRouter(routes)
   ]
-}).catch((err) => console.error(err));
+}).catch((error) => {
+  console.error(error);
+});
