@@ -6,6 +6,7 @@ import com.mediaservice.mediaservice.exception.MediaUploadException;
 import com.mediaservice.mediaservice.models.Media;
 import com.mediaservice.mediaservice.repository.MediaRepository;
 
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,14 +61,13 @@ public class MediaService {
         for (String imagePath : images) {
             try {
                 String publicId = extractPublicId(imagePath);
-                
+
                 cloudinary.uploader().destroy(
                         publicId,
                         ObjectUtils.asMap(
-                                "resource_type", "image")
-                );
-    
-            mediaRepository.deleteByImagePath(imagePath);
+                                "resource_type", "image"));
+
+                mediaRepository.deleteByImagePath(imagePath);
             } catch (IOException e) {
                 throw new MediaUploadException(
                         "Failed to upload image",
@@ -75,6 +75,11 @@ public class MediaService {
             }
         }
 
+    }
+
+    @KafkaListener(topics = "images-deleted", groupId = "media-service")
+    public void deleteProductImages(ProductDeletedEvent event) {
+        deleteImages(event.Imagepaths());
     }
 
     private String extractPublicId(String imageUrl) {
@@ -95,5 +100,9 @@ public class MediaService {
         }
 
         return publicId;
+    }
+
+    public record ProductDeletedEvent(
+            List<String> Imagepaths) {
     }
 }
