@@ -1,10 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-products',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
@@ -22,6 +24,9 @@ export class ProductsComponent implements OnInit {
 
   loadProducts(): void
   {
+    this.isLoading = true;
+    this.hasError = false;
+
     this.productService.getProducts().subscribe({
       next: (products) => {
         this.products = products;

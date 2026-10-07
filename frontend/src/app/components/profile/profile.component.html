@@ -1,1 +1,21 @@
-<h1>Logged in</h1>
+<section class="profile-page">
+  <p class="eyebrow">ACCOUNT</p>
+  <h1>Your account</h1>
+
+  @if (isLoading) {
+    <p class="profile-message" role="status">Loading account...</p>
+  } @else if (errorMessage) {
+    <p class="profile-message error" role="alert">{{ errorMessage }}</p>
+  } @else if (currentUser) {
+    <div class="profile-card">
+      <h2>{{ currentUser.name }}</h2>
+      <p>{{ currentUser.email }}</p>
+
+      @if (isSeller) {
+        <a class="profile-action" routerLink="/seller/products">
+          Manage products
+        </a>
+      }
+    </div>
+  }
+</section>

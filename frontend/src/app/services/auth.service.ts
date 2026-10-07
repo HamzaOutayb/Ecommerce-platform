@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { API_BASE_URL, AUTH_TOKEN_KEY } from '../helpers/api-url';
 import {
   LoginRequest,
   LoginResponse,
@@ -13,9 +14,8 @@ import {
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly tokenKey = 'buy-auth-token';
   private readonly authenticatedState = signal(
-    Boolean(localStorage.getItem(this.tokenKey))
+    Boolean(localStorage.getItem(AUTH_TOKEN_KEY))
   );
 
   readonly authenticated = this.authenticatedState.asReadonly();
@@ -23,7 +23,7 @@ export class AuthService {
   login(request: LoginRequest): Observable<LoginResponse>
   {
     return this.http.post<LoginResponse>(
-      'http://localhost:8080/auth/login',
+      `${API_BASE_URL}/auth/login`,
       request
     );
   }
@@ -31,19 +31,52 @@ export class AuthService {
   register(request: RegisterRequest): Observable<RegisterResponse>
   {
     return this.http.post<RegisterResponse>(
-      'http://localhost:8080/auth/register',
+      `${API_BASE_URL}/auth/register`,
       request
     );
   }
 
   saveToken(token: string): void
   {
-    localStorage.setItem(this.tokenKey, token);
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
     this.authenticatedState.set(true);
   }
 
   isAuthenticated(): boolean
   {
     return this.authenticatedState();
+  }
+
+  isSeller(): boolean
+  {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
+
+    if (!token) {
+      return false;
+    }
+
+    const tokenParts = token.split('.');
+
+    if (tokenParts.length !== 3) {
+      return false;
+    }
+
+    let payload = tokenParts[1].replace(/-/g, '+').replace(/_/g, '/');
+
+    while (payload.length % 4 !== 0) {
+      payload += '=';
+    }
+
+    try {
+      const claims = JSON.parse(atob(payload)) as { role: string };
+
+      if (claims.role === 'ROLE_SELLER' || claims.role === 'SELLER') {
+        return true;
+      }
+    } catch {
+      return false;
+    }
+
+    return false;
   }
 }
