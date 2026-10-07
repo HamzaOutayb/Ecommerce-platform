@@ -59,23 +59,39 @@ public class ProductService {
     }
 
     public void deleteProduct(String id, String sellerId) {
+
+        System.out.println("1 - ID: " + id);
+        System.out.println("2 - Seller ID: " + sellerId);
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(
                         "Product not found with id: " + id));
 
+        System.out.println("3 - Product found: " + product.getId());
+        System.out.println("4 - Product seller: " + product.getSellerId());
+
         if (!product.getSellerId().equals(sellerId)) {
+            System.out.println("5 - NOT OWNER");
             throw new ForbiddenException(
                     "You are not the owner of this product");
         }
 
+        System.out.println("6 - Owner verified");
+
         ProductDeletedEvent event = new ProductDeletedEvent(product.getImageUrls());
+
+        System.out.println("7 - Event created");
 
         kafkaTemplate.send(
                 "images-deleted",
                 product.getId(),
                 event);
 
-        productRepository.delete(product);
+        System.out.println("8 - Kafka send called");
+
+        productRepository.deleteById(id);
+
+        System.out.println("9 - Product deleted");
     }
 
     public record ProductDeletedEvent(

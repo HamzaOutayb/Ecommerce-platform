@@ -4,10 +4,11 @@ server:
 spring:
   application:
     name: product-service
-  
+
   kafka:
-    bootstrap-servers: kafka:19092
-  
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   data:
     mongodb:
       uri: ${SPRING_MONGODB_URI:${MONGODB_URI:mongodb://localhost:27018/productdb}}
