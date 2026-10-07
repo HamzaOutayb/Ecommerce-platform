@@ -13,20 +13,20 @@
             "outputPath": "dist/buy-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "tsConfig": "tsconfig.json"
+            "tsConfig": "tsconfig.json",
+            "styles": ["src/styles.css"]
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "buy-frontend:build",
-            "proxyConfig": "proxy.conf.json"
+            "buildTarget": "buy-frontend:build"
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": "0e5e4ae4-7777-416d-9e56-abf56dc4c466"
+    "analytics": false
   }
 }

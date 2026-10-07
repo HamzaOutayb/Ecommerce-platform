@@ -1,15 +1,8 @@
-# Dependencies
 /node_modules/
-
-# Angular build output and cache
 /dist/
 /.angular/
-
-# Test and tool output
 /coverage/
 /.sass-cache/
-
-# Local editor and operating system files
 /.idea/
 .DS_Store
 *.log
