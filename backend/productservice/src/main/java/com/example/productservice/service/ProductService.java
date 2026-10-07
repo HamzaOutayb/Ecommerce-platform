@@ -11,6 +11,7 @@ import com.example.productservice.repository.ProductRepository;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,39 +60,30 @@ public class ProductService {
     }
 
     public void deleteProduct(String id, String sellerId) {
-
-        System.out.println("1 - ID: " + id);
-        System.out.println("2 - Seller ID: " + sellerId);
-
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(
                         "Product not found with id: " + id));
 
-        System.out.println("3 - Product found: " + product.getId());
-        System.out.println("4 - Product seller: " + product.getSellerId());
-
         if (!product.getSellerId().equals(sellerId)) {
-            System.out.println("5 - NOT OWNER");
             throw new ForbiddenException(
                     "You are not the owner of this product");
         }
 
-        System.out.println("6 - Owner verified");
-
         ProductDeletedEvent event = new ProductDeletedEvent(product.getImageUrls());
 
-        System.out.println("7 - Event created");
-
-        kafkaTemplate.send(
-                "images-deleted",
-                product.getId(),
-                event);
-
-        System.out.println("8 - Kafka send called");
+        try {
+            kafkaTemplate.send(
+                    "images-deleted",
+                    product.getId(),
+                    event).get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted while publishing product deletion event", e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException("Failed to publish product deletion event", e);
+        }
 
         productRepository.deleteById(id);
-
-        System.out.println("9 - Product deleted");
     }
 
     public record ProductDeletedEvent(

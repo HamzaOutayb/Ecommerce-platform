@@ -79,7 +79,7 @@ public class MediaService {
 
     @KafkaListener(topics = "images-deleted", groupId = "media-service")
     public void deleteProductImages(ProductDeletedEvent event) {
-        deleteImages(event.Imagepaths());
+        deleteImages(event.imagePaths());
     }
 
     private String extractPublicId(String imageUrl) {
@@ -103,6 +103,6 @@ public class MediaService {
     }
 
     public record ProductDeletedEvent(
-            List<String> Imagepaths) {
+            List<String> imagePaths) {
     }
 }
