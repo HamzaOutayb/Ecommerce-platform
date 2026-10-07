@@ -42,6 +42,12 @@ export class AuthService {
     this.authenticatedState.set(true);
   }
 
+  logout(): void
+  {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    this.authenticatedState.set(false);
+  }
+
   isAuthenticated(): boolean
   {
     return this.authenticatedState();

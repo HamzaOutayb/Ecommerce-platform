@@ -35,8 +35,11 @@
   border: 1px solid transparent;
   border-radius: 3px;
   color: var(--color-ink);
+  background: transparent;
+  cursor: pointer;
   font-size: 13px;
   font-weight: 550;
+  font-family: inherit;
   text-decoration: none;
   transition: background-color 140ms ease, border-color 140ms ease;
 }

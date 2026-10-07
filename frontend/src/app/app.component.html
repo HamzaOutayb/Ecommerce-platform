@@ -3,12 +3,16 @@
     <a class="brand" routerLink="/products">Buy</a>
 
     <div class="nav-actions">
-      <a class="nav-button" routerLink="/login">Login</a>
-      <a class="nav-button nav-button-primary" routerLink="/register">
-        Register
-      </a>
       @if (authenticated()) {
         <a class="nav-button" routerLink="/profile">Profile</a>
+        <button class="nav-button" type="button" (click)="logout()">
+          Log out
+        </button>
+      } @else {
+        <a class="nav-button" routerLink="/login">Login</a>
+        <a class="nav-button nav-button-primary" routerLink="/register">
+          Register
+        </a>
       }
     </div>
   </nav>
