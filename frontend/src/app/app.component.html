@@ -4,7 +4,22 @@
 
     <div class="nav-actions">
       @if (authenticated()) {
-        <a class="nav-button" routerLink="/profile">Profile</a>
+        <a
+          class="nav-avatar"
+          routerLink="/profile"
+          [attr.aria-label]="(currentUser()?.name ?? 'Your') + ' profile'"
+          title="Profile"
+        >
+          @if (currentUser(); as user) {
+            @if (user.avatar) {
+              <img [src]="user.avatar" alt="">
+            } @else {
+              <span>{{ user.name.charAt(0).toUpperCase() }}</span>
+            }
+          } @else {
+            <span>U</span>
+          }
+        </a>
         <button class="nav-button" type="button" (click)="logout()">
           Log out
         </button>

@@ -48,7 +48,7 @@ export class LoginComponent {
       next: (response) => {
         this.authService.saveToken(response.token);
         this.isSubmitting = false;
-        this.router.navigateByUrl('/profile');
+        this.router.navigateByUrl('/products');
       },
       error: (error: HttpErrorResponse) => {
         this.errorMessage = getApiErrorMessage(

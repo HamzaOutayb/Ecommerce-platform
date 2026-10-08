@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/media/images/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/media/images").hasRole("SELLER")
+                        .requestMatchers(HttpMethod.POST, "/media/images").hasAnyRole("SELLER", "CLIENT")
                         .requestMatchers(HttpMethod.DELETE, "/media/images/**").hasRole("SELLER")
                         .anyRequest().authenticated())
                 .build();
