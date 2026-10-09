@@ -4,6 +4,9 @@
 
     <div class="nav-actions">
       @if (authenticated()) {
+        @if (seller) {
+          <a class="nav-button" routerLink="/seller/products">Dashboard</a>
+        }
         <a
           class="nav-avatar"
           routerLink="/profile"

@@ -18,17 +18,24 @@ export class AppComponent {
   readonly authenticated = this.authService.authenticated;
   readonly currentUser = this.userService.currentUser;
 
-  private readonly currentUserEffect = effect((onCleanup) => {
-    if (!this.authenticated()) {
-      this.userService.clearCurrentUser();
-      return;
-    }
+  get seller(): boolean {
+    return this.authenticated() && this.authService.isSeller();
+  }
 
-    const subscription = this.userService.getCurrentUser().subscribe({
-      error: () => this.userService.clearCurrentUser()
+  constructor()
+  {
+    effect((onCleanup) => {
+      if (!this.authenticated()) {
+        this.userService.clearCurrentUser();
+        return;
+      }
+
+      const subscription = this.userService.getCurrentUser().subscribe({
+        error: () => this.userService.clearCurrentUser()
+      });
+      onCleanup(() => subscription.unsubscribe());
     });
-    onCleanup(() => subscription.unsubscribe());
-  });
+  }
 
   logout(): void
   {
