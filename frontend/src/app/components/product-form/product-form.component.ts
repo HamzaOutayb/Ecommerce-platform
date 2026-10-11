@@ -35,19 +35,38 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   readonly maximumImages = 5;
   readonly maximumImageSize = 2 * 1024 * 1024;
 
-  readonly form = this.formBuilder.group({
-    name: ['', [Validators.required, Validators.maxLength(100)]],
-    description: ['', Validators.maxLength(1000)],
-    price: [0, [Validators.required, Validators.min(0.01)]],
-    quantity: [
-      0,
-      [
-        Validators.required,
-        Validators.min(0),
-        Validators.pattern(/^\d+$/)
-      ]
+readonly form = this.formBuilder.group({
+  name: [
+    '',
+    [
+      Validators.required,
+      Validators.maxLength(50)
     ]
-  });
+  ],
+
+  description: [
+    '',
+    Validators.maxLength(2000)
+  ],
+
+  price: [
+    0,
+    [
+      Validators.required,
+      Validators.min(0.01),
+      Validators.max(100000000),
+    ]
+  ],
+
+  quantity: [
+    0,
+    [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(100000000),
+    ]
+  ]
+});
 
   productId = '';
   isEditing = false;
