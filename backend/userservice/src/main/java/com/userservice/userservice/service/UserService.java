@@ -1,13 +1,14 @@
 package com.userservice.userservice.service;
 
 import java.util.Locale;
+
 import org.springframework.stereotype.Service;
 
 import com.userservice.userservice.dto.UserResponse;
 import com.userservice.userservice.dto.UserUpdateRequest;
-import com.userservice.userservice.exception.ResourceNotFoundException;
 import com.userservice.userservice.entity.User;
 import com.userservice.userservice.event.UserEventPublisher;
+import com.userservice.userservice.exception.ResourceNotFoundException;
 import com.userservice.userservice.repository.UserRepository;
 
 @Service
@@ -39,6 +40,19 @@ public class UserService {
             String avatar = request.getAvatar().trim();
             user.setAvatar(avatar.isEmpty() ? null : avatar);
         }
+        User savedUser = userRepository.save(user);
+        UserResponse response = new UserResponse();
+        response.setId(savedUser.getId());
+        response.setEmail(savedUser.getEmail());
+        response.setName(savedUser.getName());
+        response.setRole(savedUser.getRole() == null ? null : savedUser.getRole().name());
+        response.setAvatar(savedUser.getAvatar());
+        return response;
+    }
+
+    public UserResponse updateAvatar(String email, String avatarUrl) {
+        User user = findByEmail(email);
+        user.setAvatar(avatarUrl.trim());
         User savedUser = userRepository.save(user);
         UserResponse response = new UserResponse();
         response.setId(savedUser.getId());

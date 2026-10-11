@@ -12,6 +12,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
+
   product-mongodb:
     image: mongo:7.0.14
     container_name: product-service-mongodb
@@ -25,6 +26,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
+  
   media-mongodb:
     image: mongo:7.0.14
     container_name: media-service-mongodb

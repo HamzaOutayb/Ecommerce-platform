@@ -3,7 +3,6 @@ package com.example.gateway;
 import static org.springframework.cloud.gateway.server.mvc.filter.LoadBalancerFilterFunctions.lb;
 import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions.route;
 import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions.http;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.function.RequestPredicates;
@@ -18,6 +17,7 @@ public class GatewayRoutesConfig {
         return route("user-service")
                 .route(RequestPredicates.path("/auth/**"), http())
                 .route(RequestPredicates.path("/me"), http())
+                .route(RequestPredicates.path("/me/**"), http())
                 .filter(lb("user-service"))
                 .build()
                 .and(route("product-service")
