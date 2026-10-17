@@ -1,0 +1,16 @@
+# Keystore and certificates
+**/gateway.p12
+*.p12
+
+# Environment and sensitive files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

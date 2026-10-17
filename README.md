@@ -161,7 +161,20 @@ cd 01-buy
 
 Replace `<YOUR_REPOSITORY_URL>` with your Git repository URL.
 
-### 2. Configure the environment
+### 2. Configure the environment and generate https file
+
+```bash
+  keytool -genkeypair \
+  -alias gateway \
+  -keyalg RSA \
+  -keysize 2048 \
+  -storetype PKCS12 \
+  -keystore gateway.p12 \
+  -validity 365 \
+  -dname "CN=localhost" \
+  -ext "SAN=dns:localhost,ip:127.0.0.1" \
+  -storepass changeit
+  ```
 
 Create and complete the `.env` file as described in [Environment Configuration](#environment-configuration).
 

@@ -7,11 +7,11 @@ services:
     volumes:
       - user_mongodb_data:/data/db
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: [ "CMD-SHELL", "mongosh --quiet 127.0.0.1:27017/test --eval \"db.adminCommand('ping')\" || exit 1" ]
       interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
 
   product-mongodb:
     image: mongo:7.0.14
@@ -21,11 +21,11 @@ services:
     volumes:
       - product_mongodb_data:/data/db
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: [ "CMD-SHELL", "mongosh --quiet 127.0.0.1:27017/test --eval \"db.adminCommand('ping')\" || exit 1" ]
       interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
   
   media-mongodb:
     image: mongo:7.0.14
@@ -35,11 +35,11 @@ services:
     volumes:
       - media_mongodb_data:/data/db
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: [ "CMD-SHELL", "mongosh --quiet 127.0.0.1:27017/test --eval \"db.adminCommand('ping')\" || exit 1" ]
       interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
 
   kafka:
     image: apache/kafka:4.3.1
@@ -165,13 +165,14 @@ services:
       - "8080:8080"
     environment:
       JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-key-which-is-long-enough}
+      HTTPS_KEYSTORE_PASSWORD: ${HTTPS_KEYSTORE_PASSWORD:-changeit}
     depends_on:
       eureka-server:
         condition: service_healthy
       user-service:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health || exit 1" ]
+      test: ["CMD-SHELL", "curl -kfsS https://localhost:8080/actuator/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 12
