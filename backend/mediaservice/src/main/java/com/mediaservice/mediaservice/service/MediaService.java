@@ -39,15 +39,13 @@ public class MediaService {
                         file.getBytes(),
                         ObjectUtils.asMap(
                                 "resource_type", "image"));
-                String status = result.get("result").toString();
-                
-                if (!"ok".equals(status)) {
-                    throw new MediaUploadException(
-                            "Failed to upload image: " + status,
-                            null);
-                }
+   
                 String imagePath = result.get("secure_url").toString();
 
+                if(imagePath == null || imagePath.isEmpty()) {
+                    throw new MediaUploadException(
+                            "Failed to upload image: secure_url is null or empty", null);
+                }
                 Media media = new Media();
                 media.setImagePath(imagePath);
                 mediaRepository.save(media);
