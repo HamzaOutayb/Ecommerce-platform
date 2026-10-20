@@ -2,6 +2,7 @@ package com.mediaservice.mediaservice.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.mediaservice.mediaservice.exception.MediaDeletionException;
 import com.mediaservice.mediaservice.exception.MediaUploadException;
 import com.mediaservice.mediaservice.models.Media;
 import com.mediaservice.mediaservice.repository.MediaRepository;
@@ -38,7 +39,13 @@ public class MediaService {
                         file.getBytes(),
                         ObjectUtils.asMap(
                                 "resource_type", "image"));
-
+                String status = result.get("result").toString();
+                
+                if (!"ok".equals(status)) {
+                    throw new MediaUploadException(
+                            "Failed to upload image: " + status,
+                            null);
+                }
                 String imagePath = result.get("secure_url").toString();
 
                 Media media = new Media();
@@ -62,16 +69,19 @@ public class MediaService {
             try {
                 String publicId = extractPublicId(imagePath);
 
-                cloudinary.uploader().destroy(
+                Map<?, ?> result = cloudinary.uploader().destroy(
                         publicId,
                         ObjectUtils.asMap(
                                 "resource_type", "image"));
-
+                String status = result.get("result").toString();
+                if (!"ok".equals(status) && !"not found".equals(status)) {
+                    throw new MediaDeletionException(
+                            "Failed to delete image from storage: " + status);
+                }
                 mediaRepository.deleteByImagePath(imagePath);
             } catch (IOException e) {
-                throw new MediaUploadException(
-                        "Failed to upload image",
-                        e);
+                throw new MediaDeletionException(
+                        "Failed to delete image from storage");
             }
         }
 
