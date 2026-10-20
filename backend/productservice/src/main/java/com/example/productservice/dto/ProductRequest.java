@@ -17,7 +17,7 @@ import java.util.List;
 public class ProductRequest {
 
     @NotBlank(message = "Product name is required")
-    @Size(max = 15, message = "Product Name Must Not Exceed 15 characters")
+    @Size(max = 30, message = "Product Name Must Not Exceed 30 characters")
     private String name;
 
     @Size(max = 2000, message = "Description must not exceed 2000 characters")
