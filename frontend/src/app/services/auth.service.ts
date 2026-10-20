@@ -17,7 +17,7 @@ export class AuthService {
   private readonly authenticatedState = signal(
     Boolean(localStorage.getItem(AUTH_TOKEN_KEY))
   );
-  public role: signal<string | null> = signal<string | null>(null);
+  public role = signal<string | null>(null);
 
   readonly authenticated = this.authenticatedState.asReadonly();
 
@@ -56,42 +56,7 @@ export class AuthService {
 
   isSeller(): boolean
   {
-  //   const token = localStorage.getItem(AUTH_TOKEN_KEY);
-
-  //   if (!token) {
-  //     return false;
-  //   }
-
-  //   const tokenParts = token.split('.');
-
-  //   if (tokenParts.length !== 3) {
-  //     return false;
-  //   }
-
-  //   let payload = tokenParts[1].replace(/-/g, '+').replace(/_/g, '/');
-
-  //   while (payload.length % 4 !== 0) {
-  //     payload += '=';
-  //   }
-
-  //   try {
-  //     const claims = JSON.parse(atob(payload)) as { role: string };
-
-  //     if (claims.role === 'ROLE_SELLER' || claims.role === 'SELLER') {
-  //       return true;
-  //     }
-  //   } catch {
-  //     return false;
-  //   }
-
-  //   return false;
-  // }
-  this.role.subscribe((role: string | null) => {
-    if (role === 'ROLE_SELLER' || role === 'SELLER') {
-      return true;
-    }
-  });
-
-  return false;
+    const role = this.role();
+    return role === 'ROLE_SELLER' || role === 'SELLER';
   }
 }

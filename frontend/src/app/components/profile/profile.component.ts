@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { getApiErrorMessage } from '../../helpers/api-error-message';
 import { UserProfile } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
@@ -10,7 +9,6 @@ import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

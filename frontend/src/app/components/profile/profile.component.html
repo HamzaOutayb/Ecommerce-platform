@@ -17,8 +17,8 @@
       </div>
       <h2>{{ currentUser.name }}</h2>
       <p>{{ currentUser.email }}</p>
-
-      <label class="profile-action" [class.disabled]="isUploadingAvatar">
+      @if(isSeller){
+        <label class="profile-action" [class.disabled]="isUploadingAvatar">
         {{ isUploadingAvatar ? 'Uploading...' : 'Change profile photo' }}
         <input
           type="file"
@@ -33,12 +33,11 @@
       @if (successMessage) {
         <p class="profile-message success" role="status">{{ successMessage }}</p>
       }
-
-      @if (isSeller) {
         <a class="profile-action" routerLink="/seller/products">
           Manage products
         </a>
-      }
+    }
     </div>
+      
   }
 </section>
