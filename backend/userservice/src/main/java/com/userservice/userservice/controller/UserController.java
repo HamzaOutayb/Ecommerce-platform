@@ -40,9 +40,9 @@ public class UserController {
         return userService.updateAvatar(authentication.getName(), request.getAvatar());
     }
 
-    @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteProfile(Authentication authentication) {
-        userService.deleteProfile(authentication.getName());
-        return ResponseEntity.noContent().build();
-    }
+    // @DeleteMapping("/me")
+    // public ResponseEntity<Void> deleteProfile(Authentication authentication) {
+    //     userService.deleteProfile(authentication.getName());
+    //     return ResponseEntity.noContent().build();
+    // }
 }

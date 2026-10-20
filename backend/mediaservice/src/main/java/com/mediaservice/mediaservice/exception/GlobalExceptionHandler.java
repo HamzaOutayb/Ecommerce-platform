@@ -26,11 +26,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleMaxUploadSize(
             MaxUploadSizeExceededException ex, HttpServletRequest request) {
         ApiError error = new ApiError(
-                HttpStatus.PAYLOAD_TOO_LARGE.value(),
-                HttpStatus.PAYLOAD_TOO_LARGE.getReasonPhrase(),
+                HttpStatus.CONTENT_TOO_LARGE.value(),
+                HttpStatus.CONTENT_TOO_LARGE.getReasonPhrase(),
                 "File size exceeds the maximum allowed limit (10 MB per file, 50 MB total).",
                 request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(error);
+        return ResponseEntity.status(HttpStatus.CONTENT_TOO_LARGE).body(error);
     }
 
     @ExceptionHandler(Exception.class)
