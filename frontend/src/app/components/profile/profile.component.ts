@@ -55,6 +55,25 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
     this.isUploadingAvatar = true;
+    if(file.size > 5 * 1024 * 1024) {
+      this.errorMessage = 'The selected image exceeds the maximum size of 5MB.';
+      this.isUploadingAvatar = false;
+      return;
+    }
+    if(this.currentUser && this.currentUser.avatar) {
+      this.mediaService.deleteImages([this.currentUser.avatar]).subscribe({
+        next: () => {
+
+        },
+        error: (error: HttpErrorResponse) => {
+          this.errorMessage = getApiErrorMessage(
+            error,
+            'The previous profile photo could not be deleted.'
+          );
+          this.isUploadingAvatar = false;
+        }
+      })
+    }
 
     this.mediaService.uploadImages([file]).subscribe({
       next: (urls) => {
@@ -89,5 +108,12 @@ export class ProfileComponent implements OnInit {
         this.isUploadingAvatar = false;
       }
     });
+  }
+  retryFetchUser(): void
+  {
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.ngOnInit();
   }
 }
