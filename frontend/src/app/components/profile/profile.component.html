@@ -17,7 +17,7 @@
       </div>
       <h2>{{ currentUser.name }}</h2>
       <p>{{ currentUser.email }}</p>
-      @if(isSeller){
+      @if(currentUser.role === 'SELLER') {
         <label class="profile-action" [class.disabled]="isUploadingAvatar">
         {{ isUploadingAvatar ? 'Uploading...' : 'Change profile photo' }}
         <input

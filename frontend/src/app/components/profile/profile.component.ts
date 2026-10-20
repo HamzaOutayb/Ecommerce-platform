@@ -84,7 +84,7 @@ export class ProfileComponent implements OnInit {
       error: (error: HttpErrorResponse) => {
         this.errorMessage = getApiErrorMessage(
           error,
-          'The image could not be uploaded. Choose an image up to 2 MB.'
+          'The image could not be uploaded.'
         );
         this.isUploadingAvatar = false;
       }
