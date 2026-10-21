@@ -2,7 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { getApiErrorMessage } from '../../helpers/api-error-message';
 import { UserProfile } from '../../models/user.model';
-import { AuthService } from '../../services/auth.service';
 import { MediaService } from '../../services/media.service';
 import { UserService } from '../../services/user.service';
 
@@ -13,11 +12,8 @@ import { UserService } from '../../services/user.service';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
-  private readonly authService = inject(AuthService);
   private readonly mediaService = inject(MediaService);
   private readonly userService = inject(UserService);
-
-  readonly isSeller = this.authService.isSeller();
 
   currentUser: UserProfile | null = null;
   isLoading = true;

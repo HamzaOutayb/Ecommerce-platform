@@ -49,8 +49,6 @@ export class LoginComponent {
         this.authService.saveToken(response.token);
         this.isSubmitting = false;
         this.router.navigateByUrl('/products');
-        this.authService.role.set(response.role);
-        console.log('User role:', response.role);
       },
       error: (error: HttpErrorResponse) => {
         this.errorMessage = getApiErrorMessage(

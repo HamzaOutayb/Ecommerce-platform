@@ -8,16 +8,17 @@ import {
   RegisterRequest,
   RegisterResponse
 } from '../models/auth.model';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
+  private readonly userService = inject(UserService);
   private readonly authenticatedState = signal(
     Boolean(localStorage.getItem(AUTH_TOKEN_KEY))
   );
-  public role = signal<string | null>(null);
 
   readonly authenticated = this.authenticatedState.asReadonly();
 
@@ -56,7 +57,7 @@ export class AuthService {
 
   isSeller(): boolean
   {
-    const role = this.role();
+    const role = this.userService.currentUser()?.role;
     return role === 'ROLE_SELLER' || role === 'SELLER';
   }
 }
